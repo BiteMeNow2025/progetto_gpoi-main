@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 // TODO: Remove this in production
-const DEV_MODE = false;
+const DEV_MODE = true;
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
