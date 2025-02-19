@@ -24,7 +24,10 @@ const LoginPage = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+    <Container className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+      <div className='ratio ratio-1x1 mb-5' style={{ width: '100%', maxWidth: '7.5rem' }}>
+        <img src='https://cdn-icons-png.flaticon.com/512/7627/7627769.png'></img>
+      </div>
       <div style={{ width: '100%', maxWidth: '400px' }}>
         <Card>
           <Card.Body>
@@ -32,9 +35,9 @@ const LoginPage = () => {
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="email"
                   value={formData.username}
                   onChange={(e) => setFormData({...formData, username: e.target.value})}
                   required
@@ -48,6 +51,16 @@ const LoginPage = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   required
+                />
+                <div className='d-flex justify-content-end'>
+                  <Form.Text className='text-muted text-end'>Hai dimenticato la password?</Form.Text>
+                </div>
+              </Form.Group>
+
+              <Form.Group className='mb-3'>
+                <Form.Check
+                  type="checkbox"
+                  label="Ricordami"
                 />
               </Form.Group>
 

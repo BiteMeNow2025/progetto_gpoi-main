@@ -1,15 +1,89 @@
-import React from 'react';
-import { Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, InputGroup, Button, Badge } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faCheck, faFilter } from '@fortawesome/free-solid-svg-icons';
+import ProductCard from '../components/ProductCard';
+import styles from './HomePage.module.css';
+import { categories, sampleProducts } from '../data/products';
+import ButtonComponent from '../components/ui/ButtonComponent';
 
-const HomePage = () => {
+function HomePage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState(['All']);
+  const [isSearchVisible, setIsSearchVisible] = useState(true);
+
+  const handleCategoryToggle = (category) => {
+    setSelectedCategories(prev => {
+      if (category === 'All') {
+        return ['All'];
+      }
+
+      const newCategories = prev.filter(c => c !== 'All');
+      if (prev.includes(category)) {
+        const filtered = newCategories.filter(c => c !== category);
+        return filtered.length === 0 ? ['All'] : filtered;
+      } else {
+        return [...newCategories, category];
+      }
+    });
+  };
+
+  const filteredProducts = sampleProducts.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategories.includes('All') || selectedCategories.includes(product.category);
+    return matchesSearch && matchesCategory;
+  });
+
   return (
-    <Container>
-      <h1>Titolo</h1>
-      <div className="featured-products">
-        {/* TODO: Display featured products */}
+    <div>
+      <div className={styles.heroSection}>
+        <Container>
+          <div className="text-center text-light">
+            <h1 className="display-3 fw-bold mb-3">La Tua Pausa Pranzo Perfetta</h1>
+            <p className="lead fs-3 opacity-75">
+              Scopri i nostri prodotti freschi e deliziosi
+            </p>
+            <Col md={6} className='mx-auto pt-3'>
+            <InputGroup className='my-2'>
+              <Form.Control
+                className='py-1 rounded-5 me-2'
+                placeholder="Ricerca prodotti"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} />
+              <Button className="px-3 py-2 bg-light text-dark border-0 rounded-5">
+                <FontAwesomeIcon icon={faSearch} />
+              </Button>
+            </InputGroup>
+            </Col>
+          </div>
+        </Container>
       </div>
-    </Container>
+
+      <div className='bg-dark pt-5'>
+        <Container className="mt-5">
+          <div className="mb-5 pb-5">
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {filteredProducts.map(product => (
+                <Col key={product.id}>
+                  <div className="transition-transform hover-lift">
+                    <ProductCard product={product} />
+                  </div>
+                </Col>
+              ))}
+            </Row>
+
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-5">
+                <h3>Nessun prodotto trovato</h3>
+                <p className="text-muted">Sistema i filtri per trovare il prodotto desiderato</p>
+              </div>
+            )}
+          </div>
+        </Container>
+      </div>
+    </div>
   );
-};
+}
 
 export default HomePage;

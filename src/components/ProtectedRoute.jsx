@@ -8,7 +8,6 @@ const DEV_MODE = true;
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
 
-  // Development bypass
   if (DEV_MODE) {
     return children;
   }
