@@ -1,9 +1,8 @@
-// src/services/woocommerceService.js
 import axios from 'axios';
 
-const API_URL = 'https://your-wordpress-site.com/wp-json/wc/v3'; // Replace with your WordPress site URL
-const CONSUMER_KEY = 'your_consumer_key'; // Replace with your Consumer Key
-const CONSUMER_SECRET = 'your_consumer_secret'; // Replace with your Consumer Secret
+const API_URL = 'http://172.20.28.102/wp-json/wc/v1/';
+const CONSUMER_KEY = 'ck_136c17cfa88da5e422e238bb1a7acf77fc66fcd6';
+const CONSUMER_SECRET = 'cs_073f41922106c51b6f8e9cebfff83ead24c7b7ba';
 
 const woocommerceApi = axios.create({
     baseURL: API_URL,
@@ -16,6 +15,7 @@ const woocommerceApi = axios.create({
 export const fetchProducts = async () => {
     try {
         const response = await woocommerceApi.get('/products');
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching products:', error);

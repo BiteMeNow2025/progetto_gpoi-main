@@ -7,7 +7,7 @@ import styles from './HomePage.module.css';
 import { categories, sampleProducts } from '../data/products';
 import ButtonComponent from '../components/ui/ButtonComponent';
 
-function HomePage() {
+function HomePage() { // funzione che implementa la ricerca filtrata 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState(['All']);
   const [isSearchVisible, setIsSearchVisible] = useState(true);
@@ -38,7 +38,7 @@ function HomePage() {
   return (
     <div>
       <div className={styles.heroSection}>
-        <Container>
+        <Container> {/* contenitore foto e barra di ricerca*/}
           <div className="text-center text-light">
             <h1 className="display-3 fw-bold mb-3">La Tua Pausa Pranzo Perfetta</h1>
             <p className="lead fs-3 opacity-75">

@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Product from './pages/Product';
+import ProfilePage from './pages/ProfilePage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -42,6 +43,12 @@ function App() {
                   <Product />
                 </ProtectedRoute>
               } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
           </div>
         </Router>
