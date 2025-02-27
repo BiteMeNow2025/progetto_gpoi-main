@@ -65,20 +65,13 @@ function HomePage() {
           <div className="mb-5 pb-5">
             <Row xs={1} md={2} lg={3} className="g-4">
               {filteredProducts.map(product => (
-                <Col key={product.id}>
-                  <div className="transition-transform hover-lift">
+                <Col key={product.id} className="d-flex">
+                  <div className="transition-transform hover-lift w-100">
                     <ProductCard product={product} />
                   </div>
                 </Col>
               ))}
             </Row>
-
-            {filteredProducts.length === 0 && (
-              <div className="text-center py-5">
-                <h3>Nessun prodotto trovato</h3>
-                <p className="text-muted">Sistema i filtri per trovare il prodotto desiderato</p>
-              </div>
-            )}
           </div>
         </Container>
       </div>
