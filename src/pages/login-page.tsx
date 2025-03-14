@@ -6,18 +6,17 @@ const PaginaLogin = () => {
   const [password, setPassword] = useState('');
   const [mostraPassword, setMostraPassword] = useState(false);
   const [ricordami, setRicordami] = useState(false);
-  const [modalitàScura, setModalitàScura] = useState(false);
 
-  // Colori basati sul design di iOS
+  // Colori per dark mode
   const colori = {
-    background: modalitàScura ? '#000000' : '#F2F2F7',
-    card: modalitàScura ? '#1C1C1E' : '#FFFFFF',
+    background: '#000000',
+    card: '#1C1C1E',
     primary: '#FF9500', // Arancione (per evitare il blu)
     danger: '#FF3B30',
-    text: modalitàScura ? '#FFFFFF' : '#000000',
-    textSecondary: modalitàScura ? '#8E8E93' : '#6E6E73',
-    border: modalitàScura ? '#38383A' : '#E5E5EA',
-    inputBg: modalitàScura ? '#2C2C2E' : '#FFFFFF',
+    text: '#FFFFFF',
+    textSecondary: '#8E8E93',
+    border: '#38383A',
+    inputBg: '#2C2C2E',
   };
 
   const handleLogin = (e) => {
@@ -154,30 +153,6 @@ const PaginaLogin = () => {
               Registrati
             </a>
           </p>
-        </div>
-        
-        {/* Interruttore Modalità Scura */}
-        <div className="flex justify-center mt-10">
-          <button 
-            className="flex items-center px-3 py-1.5 rounded-full text-xs"
-            style={{ backgroundColor: colori.card, color: colori.textSecondary }}
-            onClick={() => setModalitàScura(!modalitàScura)}
-          >
-            <span className="mr-2">{modalitàScura ? 'Modalità Chiara' : 'Modalità Scura'}</span>
-            <div 
-              className="w-8 h-4 rounded-full relative"
-              style={{ backgroundColor: modalitàScura ? colori.primary : colori.border }}
-            >
-              <div 
-                className="absolute w-3 h-3 rounded-full top-0.5 transition-all duration-300"
-                style={{ 
-                  backgroundColor: '#FFFFFF',
-                  left: modalitàScura ? '18px' : '2px',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
-                }}
-              />
-            </div>
-          </button>
         </div>
       </div>
     </div>

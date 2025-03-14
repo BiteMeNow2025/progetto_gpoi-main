@@ -1,12 +1,12 @@
 import React from 'react';
 import { X, User, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface ProfileProps {
   setShowProfile: (value: boolean) => void;
-  navigateToFullProfile: () => void; // New prop for navigation
 }
 
-const Profile: React.FC<ProfileProps> = ({ setShowProfile, navigateToFullProfile }) => {
+const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
       <div className="bg-zinc-800 w-full md:w-96 h-full absolute right-0 p-6 overflow-y-auto transform transition-transform duration-300 ease-out">
@@ -28,13 +28,13 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile, navigateToFullProfile
           <p className="text-gray-400">john.doe@example.com</p>
           
           {/* New button to open full profile page */}
-          <button 
-            onClick={navigateToFullProfile}
+          <Link
+            to={"/profile"}
             className="mt-4 flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-full hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200"
           >
             Profilo Completo
             <ExternalLink className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
         <div className="space-y-4">
           <div className="bg-zinc-700 p-4 rounded-lg hover:bg-zinc-600 transition-colors transform hover:scale-105 duration-200 cursor-pointer">

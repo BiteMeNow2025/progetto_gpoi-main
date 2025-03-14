@@ -11,21 +11,20 @@ const ProfilePage = () => {
 
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Colors based on iOS design
+  // Colors for dark mode only
   const colors = {
-    background: isDarkMode ? '#000000' : '#F2F2F7',
-    card: isDarkMode ? '#1C1C1E' : '#FFFFFF',
-    primary: '#FF9500', // Orange (avoiding blue)
+    background: '#000000',
+    card: '#1C1C1E',
+    primary: '#FF9500',
     danger: '#FF3B30',
-    text: isDarkMode ? '#FFFFFF' : '#000000',
-    textSecondary: isDarkMode ? '#8E8E93' : '#6E6E73',
-    border: isDarkMode ? '#38383A' : '#E5E5EA',
+    text: '#FFFFFF',
+    textSecondary: '#8E8E93',
+    border: '#38383A',
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+    <div className="min-h-screen bg-zinc-900">
       <div className="max-w-md mx-auto pt-8 px-4">
         {/* Profile Header */}
         <div className="flex flex-col items-center mb-6">
@@ -52,11 +51,11 @@ const ProfilePage = () => {
         <div className="space-y-4">
           {/* Account Section */}
           <div className="rounded-xl overflow-hidden shadow-sm" style={{ backgroundColor: colors.card }}>
-            <div className="px-4 py-3 border-b" style={{ borderColor: colors.border }}>
+            <div className="px-4 py-3">
               <h2 className="font-medium" style={{ color: colors.text }}>Account</h2>
             </div>
             
-            <div className="divide-y" style={{ borderColor: colors.border }}>
+            <div className="divide-y">
               <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" 
@@ -110,35 +109,6 @@ const ProfilePage = () => {
                 </div>
                 <ChevronRight size={16} style={{ color: colors.textSecondary }} />
               </div>
-              
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" 
-                    style={{ backgroundColor: 'rgba(255, 149, 0, 0.1)' }}>
-                    <Settings size={16} style={{ color: colors.primary }} />
-                  </div>
-                  <span style={{ color: colors.text }}>Appearance</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="mr-2 text-sm" style={{ color: colors.textSecondary }}>
-                    {isDarkMode ? 'Dark' : 'Light'}
-                  </span>
-                  <div 
-                    className="w-10 h-6 rounded-full relative cursor-pointer"
-                    style={{ backgroundColor: isDarkMode ? colors.primary : colors.border }}
-                    onClick={() => setIsDarkMode(!isDarkMode)}
-                  >
-                    <div 
-                      className="absolute w-5 h-5 rounded-full top-0.5 transition-all duration-300"
-                      style={{ 
-                        backgroundColor: '#FFFFFF',
-                        left: isDarkMode ? '18px' : '2px',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           
@@ -183,7 +153,7 @@ const ProfilePage = () => {
                   type="password"
                   className="block w-full px-3 py-2 rounded-lg border"
                   style={{ 
-                    backgroundColor: isDarkMode ? '#2C2C2E' : '#FFFFFF',
+                    backgroundColor: '#2C2C2E',
                     borderColor: colors.border,
                     color: colors.text
                   }}
@@ -195,7 +165,7 @@ const ProfilePage = () => {
                   type="password"
                   className="block w-full px-3 py-2 rounded-lg border"
                   style={{ 
-                    backgroundColor: isDarkMode ? '#2C2C2E' : '#FFFFFF',
+                    backgroundColor: '#2C2C2E',
                     borderColor: colors.border,
                     color: colors.text
                   }}
@@ -207,7 +177,7 @@ const ProfilePage = () => {
                   type="password"
                   className="block w-full px-3 py-2 rounded-lg border"
                   style={{ 
-                    backgroundColor: isDarkMode ? '#2C2C2E' : '#FFFFFF',
+                    backgroundColor: '#2C2C2E',
                     borderColor: colors.border,
                     color: colors.text
                   }}
@@ -217,7 +187,7 @@ const ProfilePage = () => {
             <div className="mt-6 flex justify-end space-x-3">
               <button 
                 className="px-4 py-2 rounded-full"
-                style={{ backgroundColor: isDarkMode ? '#2C2C2E' : '#E5E5EA', color: colors.text }}
+                style={{ backgroundColor: '#2C2C2E', color: colors.text }}
                 onClick={() => setIsPasswordModalOpen(false)}
               >
                 Cancel
@@ -249,7 +219,7 @@ const ProfilePage = () => {
                 type="password"
                 className="block w-full px-3 py-2 rounded-lg border"
                 style={{ 
-                  backgroundColor: isDarkMode ? '#2C2C2E' : '#FFFFFF',
+                  backgroundColor: '#2C2C2E',
                   borderColor: colors.border,
                   color: colors.text
                 }}
@@ -258,7 +228,7 @@ const ProfilePage = () => {
             <div className="mt-6 flex justify-end space-x-3">
               <button 
                 className="px-4 py-2 rounded-full"
-                style={{ backgroundColor: isDarkMode ? '#2C2C2E' : '#E5E5EA', color: colors.text }}
+                style={{ backgroundColor: '#2C2C2E', color: colors.text }}
                 onClick={() => setIsDeleteModalOpen(false)}
               >
                 Cancel

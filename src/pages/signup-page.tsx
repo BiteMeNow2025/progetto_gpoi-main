@@ -14,21 +14,20 @@ const SignUpPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [step, setStep] = useState(1);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  // Colori in base al design iOS
+  // Colori per dark mode
   const colors = {
-    background: isDarkMode ? '#000000' : '#F2F2F7',
-    card: isDarkMode ? '#1C1C1E' : '#FFFFFF',
+    background: '#000000',
+    card: '#1C1C1E',
     primary: '#FF9500', // Arancione (evitando il blu)
     success: '#34C759', // Verde iOS
     danger: '#FF3B30',
-    text: isDarkMode ? '#FFFFFF' : '#000000',
-    textSecondary: isDarkMode ? '#8E8E93' : '#6E6E73',
-    border: isDarkMode ? '#38383A' : '#E5E5EA',
-    inputBg: isDarkMode ? '#2C2C2E' : '#FFFFFF',
+    text: '#FFFFFF',
+    textSecondary: '#8E8E93',
+    border: '#38383A',
+    inputBg: '#2C2C2E',
   };
 
   const departments = [
