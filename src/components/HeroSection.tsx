@@ -8,51 +8,44 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ searchQuery, setSearchQuery }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const categories = [
-    { id: 'all', name: 'Tutte le categorie' },
-    { id: 'panini', name: 'Panini' },
-    { id: 'pizze', name: 'Pizze' },
-    { id: 'bevande', name: 'Bevande' },
-    { id: 'snacks', name: 'Snacks' }
-  ];
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
   return (
-    <div className="relative h-[600px] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-amber-500/20 to-zinc-900/90" />
+    <div className="relative h-screen overflow-hidden bg-zinc-900">
+      <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-zinc-900/80 to-zinc-900" />
       <img 
         src="/api/placeholder/1200/600"
         alt="Bar interior"
-        className="w-full h-full object-cover scale-110 filter blur-sm"
+        className="w-full h-full object-cover scale-110 filter blur-sm opacity-60"
       />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className={`text-center px-4 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg">
-            Bite Me Now
+          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-300">Bite</span>
+            <span className="text-white"> Me Now</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-100 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
             Scopri il gusto della pausa perfetta. Ordina facilmente e goditi il tuo pasto!
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-3xl mx-auto">
-            <div className="relative w-full md:w-96">
+            <div className="relative w-full md:w-[500px] group">
               <input
                 type="text"
                 placeholder="Cerca il tuo piatto preferito..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-white/10 text-white backdrop-blur-md border border-white/30 placeholder-gray-300 focus:outline-none focus:border-amber-500 transition-all duration-300"
+                className="w-full px-6 py-4 rounded-2xl bg-white/5 text-white backdrop-blur-xl border-2 border-white/10 placeholder-gray-400 focus:outline-none focus:border-amber-500/50 focus:bg-white/10 transition-all duration-300 shadow-lg"
                 aria-label="Search products"
               />
-              <Search className="absolute right-3 top-3.5 text-white h-5 w-5" />
+              <Search className="absolute right-4 top-4 text-amber-500/70 h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
             </div>
           </div>
         </div>
       </div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-900 to-transparent" />
     </div>
   );
 };

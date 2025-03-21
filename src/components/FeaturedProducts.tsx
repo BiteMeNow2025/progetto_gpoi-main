@@ -71,22 +71,27 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
   const prevPage = () => changePage('prev');
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-6 mb-20 md:mb-0" {...handlers}>
+    <div className="max-w-7xl mx-auto py-24 px-6" {...handlers}>
       <div className={`transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl font-bold text-white">Prodotti consigliati</h2>
-          <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+          <div className="text-center md:text-left">
+            <h2 className="text-4xl md:text-5xl font-bold mb-2">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-amber-300">Prodotti consigliati</span>
+            </h2>
+            <p className="text-gray-400 text-lg">Scopri i nostri prodotti più popolari</p>
+          </div>
+          <div className="flex gap-3">
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
-              className="p-2 rounded-full bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 disabled:opacity-50 transition-all duration-300"
+              className="p-3 rounded-xl bg-zinc-800/50 backdrop-blur-lg text-amber-500 hover:bg-zinc-800 disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-full bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 disabled:opacity-50 transition-all duration-300"
+              className="p-3 rounded-xl bg-zinc-800/50 backdrop-blur-lg text-amber-500 hover:bg-zinc-800 disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
             >
               <ChevronRight size={24} />
             </button>
