@@ -9,7 +9,7 @@ const PaginaLogin = () => {
 
   // Colori per dark mode
   const colori = {
-    background: '#000000',
+    background: '#FAFAFA',
     card: '#1C1C1E',
     primary: '#FF9500', // Arancione (per evitare il blu)
     danger: '#FF3B30',
