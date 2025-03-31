@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import MobileNavbar from './components/MobileNavbar';
 import SideMenu from './components/SideMenu';
@@ -9,9 +9,11 @@ import HowItWorks from './components/HowItWorks';
 import FeaturedProducts from './components/FeaturedProducts';
 import { CartProvider } from './context/CartContext';
 import { Product } from './types/types';
+import { getProducts } from './services/productService';
 import ProfilePage from './pages/Profile';
 import LoginPage from './pages/login-page';
 import SignUpPage from './pages/signup-page';
+import SharedCart from './pages/SharedCart';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 
 function App() {
@@ -20,36 +22,15 @@ function App() {
   const [showProfile, setShowProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const products: Product[] = [
-    {
-      id: 1,
-      name: 'Panino prosciutto',
-      description: 'Panino con prosciutto cotto',
-      price: 12,
-      image: '/api/placeholder/400/320',
-    },
-    {
-      id: 2,
-      name: 'Panino prosciutto',
-      description: 'Panino con prosciutto cotto e pate di carciofi',
-      price: 14,
-      image: '/api/placeholder/400/320',
-    },
-    {
-      id: 3,
-      name: 'Panino nutella',
-      description: 'Panino con nutella',
-      price: 10,
-      image: '/api/placeholder/400/320',
-    },
-    {
-      id: 4,
-      name: 'Pizza rossa',
-      description: 'La classica marinara',
-      price: 13,
-      image: '/api/placeholder/400/320',
-    },
-  ];
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const fetchedProducts = await getProducts();
+      setProducts(fetchedProducts);
+    };
+    fetchProducts();
+  }, []);
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -94,23 +75,26 @@ function App() {
           {showProfile && <Profile setShowProfile={setShowProfile} />}
 
           {/* Main Content */}
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <HeroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                  <HowItWorks />
-                  <FeaturedProducts products={filteredProducts} />
-                  <FeaturedProducts products={filteredProducts} />
-                </>
-              }
-            />
+          <div className="md:pt-16"> {/* Add padding top on medium screens and above to account for fixed navbar */}
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <HeroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <HowItWorks />
+                    <FeaturedProducts products={filteredProducts} />
+                    <FeaturedProducts products={filteredProducts} />
+                  </>
+                }
+              />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignUpPage />} />
+            <Route path='/sharedcart' element={<SharedCart/>}/>
           </Routes>
         </div>
+      </div>
       </CartProvider>
     </Router>
   );

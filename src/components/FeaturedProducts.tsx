@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, ShoppingCart, Star } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
+import { useCart } from '../context/CartContext';
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import { Product } from '../types/types';
 
 interface FeaturedProductsProps {
   products: Product[];
 }
 
 const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
+  const { addToCart, isItemAdded, lastAddedItem } = useCart();
   const [currentPage, setCurrentPage] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -114,10 +110,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
                   alt={product.name}
                   className="w-full h-48 object-cover transform transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute top-2 right-2 bg-amber-500 text-white text-sm px-2 py-1 rounded-full flex items-center gap-1">
-                  <Star size={12} />
-                  <span>4.5</span>
-                </div>
+                {/* Rating removed as requested */}
               </div>
               <div className="p-4 flex flex-col flex-grow">
                 <h3 className="text-white font-bold text-lg mb-2 group-hover:text-amber-500 transition-colors">
@@ -130,9 +123,15 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
                   <span className="text-amber-500 font-bold text-lg">
                     €{product.price.toFixed(2)}
                   </span>
-                  <button className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-[1.05] active:scale-[0.98]">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(product);
+                    }}
+                    className={`flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-[1.05] active:scale-[0.98] ${lastAddedItem?.id === product.id && isItemAdded ? 'animate-pulse ring-4 ring-amber-300' : ''}`}
+                  >
                     <ShoppingCart size={16} />
-                    <span>Aggiungi</span>
+                    <span>{lastAddedItem?.id === product.id && isItemAdded ? 'Aggiunto!' : 'Aggiungi'}</span>
                   </button>
                 </div>
               </div>

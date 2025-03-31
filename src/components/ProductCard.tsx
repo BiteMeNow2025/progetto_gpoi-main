@@ -54,17 +54,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => 
 
       {/* Content Container - Flex column with flex-grow */}
       <div className="p-4 flex flex-col flex-grow">
-        {/* Title and Rating - Fixed Height */}
+        {/* Title - Fixed Height */}
         <div className="flex justify-between items-start h-10 mb-2">
           <h3 className="text-lg font-bold text-white truncate">{product.name}</h3>
-          {product.rating ? (
-            <div className="flex items-center bg-amber-500 bg-opacity-20 px-2 py-1 rounded flex-shrink-0 ml-2">
-              <span className="text-amber-500 text-sm font-bold">{product.rating}</span>
-              <span className="text-amber-500 ml-1">★</span>
-            </div>
-          ) : (
-            <div className="flex-shrink-0 w-8"></div> // Placeholder for alignment
-          )}
         </div>
 
         {/* Description - Fixed Height */}

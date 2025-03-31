@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { CartItem, Product } from '../types';
 
 interface CartContextProps {
@@ -7,6 +7,8 @@ interface CartContextProps {
   updateQuantity: (id: number, change: number) => void;
   totalAmount: number;
   totalItems: number;
+  lastAddedItem: Product | null;
+  isItemAdded: boolean;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -24,25 +26,12 @@ interface CartProviderProps {
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Panino prosciutto",
-      price: 12,
-      quantity: 2,
-      image: "/api/placeholder/400/320"
-    },
-    {
-      id: 2,
-      name: "Panino prosciutto",
-      price: 14,
-      quantity: 1,
-      image: "/api/placeholder/400/320"
-    }
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const [lastAddedItem, setLastAddedItem] = useState<Product | null>(null);
+  const [isItemAdded, setIsItemAdded] = useState(false);
 
   const addToCart = (product: Product) => {
     setCartItems(prevItems => {
@@ -56,6 +45,15 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       }
       return [...prevItems, { ...product, quantity: 1 }];
     });
+    
+    // Set the last added item and trigger animation
+    setLastAddedItem(product);
+    setIsItemAdded(true);
+    
+    // Reset animation state after 1.5 seconds
+    setTimeout(() => {
+      setIsItemAdded(false);
+    }, 1500);
   };
 
   const updateQuantity = (id: number, change: number) => {
@@ -77,7 +75,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     addToCart,
     updateQuantity,
     totalAmount,
-    totalItems
+    totalItems,
+    lastAddedItem,
+    isItemAdded
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
