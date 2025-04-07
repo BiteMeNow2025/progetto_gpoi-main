@@ -14,8 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ searchQuery, setSearchQuery }
   }, []);
 
   return (
-    <div className="relative h-screen overflow-hidden bg-zinc-900">
-      <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-zinc-900/80 to-zinc-900" />
+    <div className="relative h-screen overflow-hidden bg-blue-950">
       <img 
         src="/api/placeholder/1200/600"
         alt="Bar interior"
@@ -37,7 +36,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ searchQuery, setSearchQuery }
                 placeholder="Cerca il tuo piatto preferito..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 rounded-2xl bg-white/5 text-white backdrop-blur-xl border-2 border-white/10 placeholder-gray-400 focus:outline-none focus:border-amber-500/50 focus:bg-white/10 transition-all duration-300 shadow-lg"
+                className="w-full px-6 py-4 rounded-2xl  /5 text-white backdrop-blur-xl border-2 border-white/10 placeholder-gray-400 focus:outline-none focus:border-amber-500/50 focus: /10 transition-all duration-300 shadow-lg"
                 aria-label="Search products"
               />
               <Search className="absolute right-4 top-4 text-amber-500/70 h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
@@ -45,7 +44,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ searchQuery, setSearchQuery }
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-900 to-transparent" />
     </div>
   );
 };

@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { X } from 'lucide-react';
+import useClickOutside from '../hooks/useClickOutside';
 
 interface SideMenuProps {
   setIsMenuOpen: (value: boolean) => void;
 }
 
 const SideMenu: React.FC<SideMenuProps> = ({ setIsMenuOpen }) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  useClickOutside(menuRef, () => setIsMenuOpen(false));
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-      <div className="bg-zinc-800 w-64 h-full p-6 transform transition-transform duration-300 ease-out">
+      <div ref={menuRef} className="  w-64 h-full p-6 transform transition-transform duration-300 ease-out">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-xl font-bold">Menu</h2>
           <button 

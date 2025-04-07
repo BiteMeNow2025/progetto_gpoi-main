@@ -24,7 +24,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900">
+    <div className="min-h-screen bg-blue-950">
       <div className="max-w-md mx-auto pt-8 px-4">
         {/* Profile Header */}
         <div className="flex flex-col items-center mb-6">

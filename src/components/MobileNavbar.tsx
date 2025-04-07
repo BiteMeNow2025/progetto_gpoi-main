@@ -18,7 +18,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
   const { totalItems } = useCart();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-zinc-800 py-4 px-6 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0   py-4 px-6 z-50">
       <div className="flex items-center justify-around">
         <button 
           className="flex flex-col items-center text-white hover:text-amber-500 transition-colors"

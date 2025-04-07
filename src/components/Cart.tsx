@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { X, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import useClickOutside from '../hooks/useClickOutside';
 
 interface CartProps {
   setIsCartOpen: (value: boolean) => void;
@@ -8,10 +10,13 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
   const { cartItems, updateQuantity, totalAmount } = useCart();
+  const navigate = useNavigate();
+  const cartRef = useRef<HTMLDivElement>(null);
+  useClickOutside(cartRef, () => setIsCartOpen(false));
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-      <div className="bg-zinc-800 w-full md:w-96 h-full absolute right-0 p-6 transform transition-transform duration-300 ease-out overflow-y-auto">
+      <div ref={cartRef} className="  w-full md:w-96 h-full absolute right-0 p-6 transform transition-transform duration-300 ease-out overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-xl font-bold">Il tuo carrello</h2>
           <button 
@@ -22,7 +27,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
             <X className="h-6 w-6" />
           </button>
         </div>
-        
+
         {cartItems.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-400">Il tuo carrello è vuoto</p>
@@ -32,7 +37,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
             {cartItems.map((item) => (
               <div 
                 key={item.id} 
-                className="flex items-center space-x-4 bg-zinc-700 p-4 rounded-lg transform transition-all duration-300 hover:scale-105"
+                className="flex items-center space-x-4 bg-blue-700 p-4 rounded-lg transform transition-all duration-300 hover:scale-105"
               >
                 <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
                 <div className="flex-1">
@@ -59,20 +64,32 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
                 <p className="text-amber-500 font-bold">${item.price * item.quantity}</p>
               </div>
             ))}
-            <div className="border-t border-zinc-700 pt-4 mt-4">
+            <div className="border-t border-blue-700 pt-4 mt-4">
               <div className="flex justify-between items-center">
                 <span className="text-white">Totale</span>
                 <span className="text-amber-500 font-bold text-xl">${totalAmount}</span>
               </div>
-              <button className="w-full border border-amber-500 text-white py-3 rounded-lg mt-4 hover:bg-amber-600/30 transition-colors transform hover:scale-105 active:scale-95 duration-200">
-                Vedi il carrello di classe
-              </button>
-              <button className="w-full bg-amber-500 text-white py-3 rounded-lg mt-4 hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200">
+              <button 
+                onClick={() => {
+                  setIsCartOpen(false);
+                  navigate('/checkout');
+                }}
+                className="w-full bg-amber-500 text-white py-3 rounded-lg mt-4 hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200"
+              >
                 Vai al pagamento
               </button>
             </div>
           </div>
         )}
+        <button 
+          onClick={() => {
+            setIsCartOpen(false);
+            navigate('/sharedcart');
+          }}
+          className="w-full border border-amber-500 text-white py-3 rounded-lg mb-4 hover:bg-amber-600/30 transition-colors transform hover:scale-105 active:scale-95 duration-200 mt-4"
+        >
+          Vedi il carrello di classe
+        </button>
       </div>
     </div>
   );

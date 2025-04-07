@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => 
 
   return (
     <div
-      className="bg-zinc-800 rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 cursor-pointer group flex flex-col h-full justify-between"
+      className="bg-stone-50 rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 cursor-pointer group flex flex-col h-full justify-between"
       onClick={() => onViewDetails && onViewDetails(product)}
     >
       {/* Image Container - Fixed Height */}

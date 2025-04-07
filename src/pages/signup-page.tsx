@@ -9,7 +9,7 @@ const SignUpPage = () => {
     password: '',
     confirmPassword: '',
     studentId: '',
-    department: ''
+    class: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +30,7 @@ const SignUpPage = () => {
     inputBg: '#2C2C2E',
   };
 
-  const departments = [
+  const classs = [
     "Amministrazione Aziendale",
     "Informatica",
     "Ingegneria",
@@ -44,13 +44,119 @@ const SignUpPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const validateForm = () => {
+    if (!formData.email) {
+      setError('Email is required');
+      return false;
+    }
+    if (step === 2) {
+      if (!formData.password) {
+        setError('Password is required');
+        return false;
+      }
+      if (!formData.confirmPassword) {
+        setError('Please confirm your password');
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return false;
+      }
+      if (!formData.class) {
+        setError('Please select your class');
+        return false;
+      }
+      if (!agreeToTerms) {
+        setError('Please accept the Terms of Service');
+        return false;
+      }
+      if (!hasLength || !hasUpperCase || !hasLowerCase || !hasNumber) {
+        setError('Password does not meet the requirements');
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    if (!validateForm()) {
+      setError('Please fill in all required fields correctly');
+      return;
+    }
+
     if (step === 1) {
+      const emailParts = formData.email.split('@');
+      if (emailParts.length !== 2 || !emailParts[0].includes('.') || emailParts[1] !== 'peano.it') {
+        setError('Email must be in the format name.surname@peano.it');
+        return;
+      }
       setStep(2);
-    } else {
-      // Gestisci la logica di registrazione qui
-      console.log('Registrazione con:', formData);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const username = formData.email.split('@')[0];
+      const registrationData = {
+        username,
+        email: formData.email,
+        password: formData.password,
+        class: formData.class
+      };
+
+      const response = await fetch('http://192.168.200.10:2025/createuser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registrationData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      setSuccess(true);
+      // Add success animation
+      const element = document.querySelector('form');
+      element.style.transition = 'transform 0.5s ease-in-out';
+      element.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        element.style.transform = 'scale(1)';
+      }, 200);
+
+      // Redirect after animation
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+    } catch (error) {
+      setError(error.message || 'An error occurred during registration');
+      console.error('Registration error:', error);
+      
+      // Add error shake animation
+      const element = document.querySelector('form');
+      element.style.transition = 'transform 0.1s ease-in-out';
+      element.style.transform = 'translateX(10px)';
+      
+      setTimeout(() => {
+        element.style.transform = 'translateX(-10px)';
+      }, 100);
+      
+      setTimeout(() => {
+        element.style.transform = 'translateX(0)';
+      }, 200);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -105,58 +211,6 @@ const SignUpPage = () => {
           <form onSubmit={handleSubmit} className="p-6">
             {step === 1 ? (
               <div className="space-y-5">
-                {/* Campo Nome */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                    Nome
-                  </label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <User size={18} style={{ color: colors.primary }} />
-                    </div>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      placeholder="Giovanni"
-                      className="w-full pl-10 pr-3 py-3 rounded-lg border focus:outline-none"
-                      style={{ 
-                        backgroundColor: colors.inputBg,
-                        borderColor: colors.border,
-                        color: colors.text
-                      }}
-                      required
-                    />
-                  </div>
-                </div>
-                
-                {/* Campo Cognome */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                    Cognome
-                  </label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <User size={18} style={{ color: colors.primary }} />
-                    </div>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      placeholder="Rossi"
-                      className="w-full pl-10 pr-3 py-3 rounded-lg border focus:outline-none"
-                      style={{ 
-                        backgroundColor: colors.inputBg,
-                        borderColor: colors.border,
-                        color: colors.text
-                      }}
-                      required
-                    />
-                  </div>
-                </div>
-                
                 {/* Campo Email */}
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
@@ -307,61 +361,35 @@ const SignUpPage = () => {
                   )}
                 </div>
                 
-                {/* Selezione Dipartimento */}
+                {/* Selezione Classe */}
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                    Dipartimento
+                    Classe
                   </label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                       <AtSign size={18} style={{ color: colors.primary }} />
                     </div>
                     <select
-                      name="department"
-                      value={formData.department}
+                      name="class"
+                      value={formData.class}
                       onChange={handleChange}
                       className="w-full pl-10 pr-10 py-3 rounded-lg border focus:outline-none appearance-none"
                       style={{ 
                         backgroundColor: colors.inputBg,
                         borderColor: colors.border,
-                        color: formData.department ? colors.text : colors.textSecondary
+                        color: formData.class ? colors.text : colors.textSecondary
                       }}
                       required
                     >
-                      <option value="" disabled>Seleziona il tuo dipartimento</option>
-                      {departments.map(dep => (
+                      <option value="" disabled>Seleziona la tua classe</option>
+                      {classs.map(dep => (
                         <option key={dep} value={dep}>{dep}</option>
                       ))}
                     </select>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                       <ChevronDown size={18} style={{ color: colors.textSecondary }} />
                     </div>
-                  </div>
-                </div>
-                
-                {/* ID Studente */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                    ID Studente
-                  </label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <User size={18} style={{ color: colors.primary }} />
-                    </div>
-                    <input
-                      type="text"
-                      name="studentId"
-                      value={formData.studentId}
-                      onChange={handleChange}
-                      placeholder="es. S12345678"
-                      className="w-full pl-10 pr-3 py-3 rounded-lg border focus:outline-none"
-                      style={{ 
-                        backgroundColor: colors.inputBg,
-                        borderColor: colors.border,
-                        color: colors.text
-                      }}
-                      required
-                    />
                   </div>
                 </div>
                 
@@ -400,6 +428,7 @@ const SignUpPage = () => {
                     opacity: agreeToTerms ? 1 : 0.6
                   }}
                   disabled={!agreeToTerms}
+                  onClick={handleSubmit}
                 >
                   Crea Account
                 </button>

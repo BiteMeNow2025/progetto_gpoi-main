@@ -80,14 +80,14 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
-              className="p-3 rounded-xl bg-zinc-800/50 backdrop-blur-lg text-amber-500 hover:bg-zinc-800 disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
+              className="p-3 rounded-xl  /50 backdrop-blur-lg text-amber-500 hover:  disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className="p-3 rounded-xl bg-zinc-800/50 backdrop-blur-lg text-amber-500 hover:bg-zinc-800 disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
+              className="p-3 rounded-xl  /50 backdrop-blur-lg text-amber-500 hover:  disabled:opacity-50 transition-all duration-500 hover:scale-[1.05] disabled:hover:scale-100"
             >
               <ChevronRight size={24} />
             </button>
@@ -99,7 +99,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
           {currentProducts.map((product, index) => (
             <div
               key={product.id}
-              className="group bg-zinc-800/50 backdrop-blur-md rounded-xl overflow-hidden transform transition-all duration-500 hover:scale-[1.02] hover:bg-zinc-800 flex flex-col h-full"
+              className="group bg-white backdrop-blur-md rounded-xl overflow-hidden transform transition-all duration-500 hover:scale-[1.02] hover:  flex flex-col h-full"
               style={{
                 transitionDelay: `${index * 100}ms`
               }}
@@ -113,7 +113,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
                 {/* Rating removed as requested */}
               </div>
               <div className="p-4 flex flex-col flex-grow">
-                <h3 className="text-white font-bold text-lg mb-2 group-hover:text-amber-500 transition-colors">
+                <h3 className="text-blue-950 font-bold text-lg mb-2 group-hover:text-amber-500 transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-grow">
@@ -145,7 +145,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
             <button
               key={index}
               onClick={() => setCurrentPage(index + 1)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${currentPage === index + 1 ? 'w-6 bg-amber-500 scale-110' : 'bg-zinc-700 hover:bg-zinc-600 hover:scale-105'}`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${currentPage === index + 1 ? 'w-6 bg-amber-500 scale-110' : 'bg-blue-700 hover:bg-blue-600 hover:scale-105'}`}
               aria-label={`Go to page ${index + 1}`}
             />
           ))}

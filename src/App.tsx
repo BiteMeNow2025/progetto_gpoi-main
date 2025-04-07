@@ -5,7 +5,6 @@ import SideMenu from './components/SideMenu';
 import Cart from './components/Cart';
 import Profile from './components/Profile';
 import HeroSection from './components/HeroSection';
-import HowItWorks from './components/HowItWorks';
 import FeaturedProducts from './components/FeaturedProducts';
 import { CartProvider } from './context/CartContext';
 import { Product } from './types/types';
@@ -14,6 +13,7 @@ import ProfilePage from './pages/Profile';
 import LoginPage from './pages/login-page';
 import SignUpPage from './pages/signup-page';
 import SharedCart from './pages/SharedCart';
+import CheckoutPage from './pages/checkout-page';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
   return (
     <Router>
       <CartProvider>
-        <div className="min-h-screen bg-zinc-900">
+        <div className="min-h-screen bg-blue-950">
           {/* Desktop Navigation */}
 
           <Navbar 
@@ -82,7 +82,6 @@ function App() {
                 element={
                   <>
                     <HeroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <HowItWorks />
                     <FeaturedProducts products={filteredProducts} />
                     <FeaturedProducts products={filteredProducts} />
                   </>
@@ -92,6 +91,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/sharedcart' element={<SharedCart/>}/>
+            <Route path='/checkout' element={<CheckoutPage />}/>
           </Routes>
         </div>
       </div>
