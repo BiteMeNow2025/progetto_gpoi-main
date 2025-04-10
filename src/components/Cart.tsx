@@ -42,7 +42,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
         }))
       };
 
-      const response = await fetch('http://80.16.146.77:2025/createorder', {
+      const response = await fetch('http://80.16.146.77:2025/createordine', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
