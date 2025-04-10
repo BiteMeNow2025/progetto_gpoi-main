@@ -1,8 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { X, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import useClickOutside from '../hooks/useClickOutside';
+
+interface OrderPayload {
+  paymentMethod: string;
+  paymentMethodTitle: string;
+  setPaid: boolean;
+  lineItems: Array<{
+    productId: number;
+    quantity: number;
+  }>;
+}
 
 interface CartProps {
   setIsCartOpen: (value: boolean) => void;
@@ -12,7 +22,46 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
   const { cartItems, updateQuantity, totalAmount } = useCart();
   const navigate = useNavigate();
   const cartRef = useRef<HTMLDivElement>(null);
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   useClickOutside(cartRef, () => setIsCartOpen(false));
+
+  const handleSubmitOrder = async () => {
+    try {
+      setIsSubmitting(true);
+      setError('');
+      
+      const orderPayload: OrderPayload = {
+        paymentMethod,
+        paymentMethodTitle: paymentMethod === 'cash' ? 'Cash' : 'Card',
+        setPaid: false,
+        lineItems: cartItems.map(item => ({
+          productId: item.id,
+          quantity: item.quantity
+        }))
+      };
+
+      const response = await fetch('http://80.16.146.77:2025/createorder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderPayload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit order');
+      }
+
+      setIsCartOpen(false);
+      navigate('/checkout');
+    } catch (err) {
+      setError('Failed to submit order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
@@ -37,7 +86,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
             {cartItems.map((item) => (
               <div 
                 key={item.id} 
-                className="flex items-center space-x-4 bg-blue-700 p-4 rounded-lg transform transition-all duration-300 hover:scale-105"
+                className="flex items-center space-x-4 bg-blue-950 p-4 rounded-lg transform transition-all duration-300 hover:scale-105"
               >
                 <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
                 <div className="flex-1">
@@ -69,15 +118,27 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
                 <span className="text-white">Totale</span>
                 <span className="text-amber-500 font-bold text-xl">${totalAmount}</span>
               </div>
-              <button 
-                onClick={() => {
-                  setIsCartOpen(false);
-                  navigate('/checkout');
-                }}
-                className="w-full bg-amber-500 text-white py-3 rounded-lg mt-4 hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200"
-              >
-                Vai al pagamento
-              </button>
+              <div className="space-y-4">
+                <div className="flex flex-col space-y-2">
+                  <label className="text-white">Payment Method</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="bg-blue-900 text-white p-2 rounded-lg border border-blue-700"
+                  >
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                  </select>
+                </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                <button 
+                  onClick={handleSubmitOrder}
+                  disabled={isSubmitting}
+                  className="w-full bg-amber-500 text-white py-3 rounded-lg hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Processing...' : 'Submit Order'}
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -22,7 +22,7 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-      <div ref={profileRef} className="bg-black/10 backdrop-blur border-l-2 border-white w-full md:w-96 h-full absolute right-0 p-6 overflow-y-auto transform transition-all duration-300 ease-out translate-x-0 group-[.closed]:translate-x-full">
+      <div ref={profileRef} className="bg-black/10 backdrop-blur border-l-2 border-white w-full md:w-96 h-full absolute right-0 p-6 overflow-y-auto transform transition-transform duration-300 ease-out">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-xl font-bold">Profilo</h2>
           <button

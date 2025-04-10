@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { X } from 'lucide-react';
-import useClickOutside from '../hooks/useClickOutside';
+import useClickOutside from '../hooks/useclickoutside';
 
 interface SideMenuProps {
   setIsMenuOpen: (value: boolean) => void;
