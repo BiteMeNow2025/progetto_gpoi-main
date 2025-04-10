@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { User, Lock, Mail, Eye, EyeOff, AtSign, ChevronDown, CheckCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -47,6 +49,9 @@ const SignUpPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  
+  const { register, login } = useAuth();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     if (!formData.email) {
@@ -111,18 +116,10 @@ const SignUpPage = () => {
         class: formData.class
       };
 
-      const response = await fetch('http://192.168.200.10:2025/createuser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registrationData)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+      const success = await register(registrationData);
+      
+      if (!success) {
+        throw new Error('Registration failed');
       }
 
       setSuccess(true);
@@ -135,10 +132,20 @@ const SignUpPage = () => {
         element.style.transform = 'scale(1)';
       }, 200);
 
-      // Redirect after animation
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1500);
+      // Automatically log in the user after successful registration
+      const loginSuccess = await login(formData.email, formData.password);
+      
+      if (loginSuccess) {
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      } else {
+        // If auto-login fails, redirect to login page
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      }
     } catch (error) {
       setError(error.message || 'An error occurred during registration');
       console.error('Registration error:', error);

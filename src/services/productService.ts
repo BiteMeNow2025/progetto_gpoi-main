@@ -20,14 +20,11 @@ interface WooCommerceProduct {
   }>;
 }
 
-const API_URL = 'https://testbackendbar.liteaccademy.it/wp-json/wc/v1/products';
+const API_URL = 'http://80.16.146.77:2025/prodotti';
 
 const api = axios.create({
   baseURL: API_URL,
   method: 'GET',
-  headers: {
-    'Authorization' : 'Basic Y2tfMjMwMGNhY2I0MDg5N2VhYWU5NDU4MzU0YzFiOWY5NDEyNDc4Yzk5ODpjc19lMzRhNjMyM2Y1Y2I5OTIxOWRiMzM3NzAwOTYzNTZiMzlhYjFmNGVh',
-  },
 });
 
 const mapWooCommerceProduct = (product: WooCommerceProduct): Product => ({

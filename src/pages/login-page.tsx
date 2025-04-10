@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const PaginaLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mostraPassword, setMostraPassword] = useState(false);
   const [ricordami, setRicordami] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   // Colori per dark mode
   const colori = {
@@ -19,10 +26,24 @@ const PaginaLogin = () => {
     inputBg: '#2C2C2E',
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Gestisci la logica del login qui
-    console.log('Accesso con:', { email, password, ricordami });
+    setError('');
+    setIsLoading(true);
+    
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate('/');
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('An error occurred during login. Please try again.');
+      console.error('Login error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -134,12 +155,19 @@ const PaginaLogin = () => {
               </div>
               
               {/* Pulsante di invio */}
+              {error && (
+                <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: colori.danger, color: '#FFFFFF' }}>
+                  {error}
+                </div>
+              )}
+              
               <button
                 type="submit"
                 className="w-full py-3 rounded-lg font-medium mt-4"
                 style={{ backgroundColor: colori.primary, color: '#FFFFFF' }}
+                disabled={isLoading}
               >
-                Accedi
+                {isLoading ? 'Accesso in corso...' : 'Accedi'}
               </button>
             </div>
           </form>
@@ -149,7 +177,7 @@ const PaginaLogin = () => {
         <div className="text-center mt-6">
           <p style={{ color: colori.textSecondary }}>
             Non hai un account?{' '}
-            <a href="#" className="font-medium" style={{ color: colori.primary }}>
+            <a href="/signup" className="font-medium" style={{ color: colori.primary }}>
               Registrati
             </a>
           </p>

@@ -16,7 +16,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-      <div ref={cartRef} className="  w-full md:w-96 h-full absolute right-0 p-6 transform transition-transform duration-300 ease-out overflow-y-auto">
+      <div ref={cartRef} className="bg-black/10 backdrop-blur border-l-2 border-white w-full md:w-96 h-full absolute right-0 p-6 transform transition-transform duration-300 ease-out overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-xl font-bold">Il tuo carrello</h2>
           <button 

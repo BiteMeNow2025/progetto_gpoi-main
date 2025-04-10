@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import HeroSection from './components/HeroSection';
 import FeaturedProducts from './components/FeaturedProducts';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 import { Product } from './types/types';
 import { getProducts } from './services/productService';
 import ProfilePage from './pages/Profile';
@@ -46,7 +47,8 @@ function App() {
 
   return (
     <Router>
-      <CartProvider>
+      <AuthProvider>
+        <CartProvider>
         <div className="min-h-screen bg-blue-950">
           {/* Desktop Navigation */}
 
@@ -66,7 +68,7 @@ function App() {
             isCartOpen={isCartOpen} 
             setShowProfile={setShowProfile} 
             showProfile={showProfile}
-            navItems={navItems}  // Pass the navItems here
+            navItems={navItems}
           />
 
           {/* Sidebars and Modals */}
@@ -95,7 +97,8 @@ function App() {
           </Routes>
         </div>
       </div>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </Router>
   );
 }

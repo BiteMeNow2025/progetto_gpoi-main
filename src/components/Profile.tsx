@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { X, User, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useClickOutside from '../hooks/useClickOutside';
+import { useAuth } from '../context/AuthContext';
 
 interface ProfileProps {
   setShowProfile: (value: boolean) => void;
@@ -9,11 +10,19 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
   const profileRef = useRef<HTMLDivElement>(null);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   useClickOutside(profileRef, () => setShowProfile(false));
+  
+  const handleLogout = () => {
+    logout();
+    setShowProfile(false);
+    navigate('/login');
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-      <div ref={profileRef} className="  w-full md:w-96 h-full absolute right-0 p-6 overflow-y-auto transform transition-transform duration-300 ease-out">
+      <div ref={profileRef} className="bg-black/10 backdrop-blur border-l-2 border-white w-full md:w-96 h-full absolute right-0 p-6 overflow-y-auto transform transition-all duration-300 ease-out translate-x-0 group-[.closed]:translate-x-full">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-white text-xl font-bold">Profilo</h2>
           <button
@@ -25,11 +34,11 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
           </button>
         </div>
         <div className="flex flex-col items-center mb-8">
-          <div className="w-24 h-24 bg-blue-700 rounded-full flex items-center justify-center mb-4 hover:bg-blue-600 transition-colors">
+          <div className="w-24 h-24 bg-blue-950 rounded-full flex items-center justify-center mb-4 hover:bg-blue-600 transition-colors">
             <User className="text-white h-12 w-12" />
           </div>
-          <h3 className="text-white text-xl font-bold">John Doe</h3>
-          <p className="text-gray-400">john.doe@example.com</p>
+          <h3 className="text-white text-xl font-bold">{user ? user.username : 'Guest'}</h3>
+          <p className="text-gray-400">{user ? user.email : 'Please login'}</p>
           
           {/* New button to open full profile page */}
           <Link
@@ -41,11 +50,14 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
           </Link>
         </div>
         <div className="space-y-4">
-          <div className="bg-blue-700 p-4 rounded-lg hover:bg-blue-600 transition-colors transform hover:scale-105 duration-200 cursor-pointer">
+          <div className="bg-blue-950 p-4 rounded-lg hover:bg-blue-900 transition-colors transform hover:scale-105 duration-200 cursor-pointer">
             <h4 className="text-white font-bold mb-2">Ordini Passati</h4>
             <p className="text-gray-400">Visualizza i tuoi ordini passati</p>
           </div>
-          <button className="w-full bg-red-500 text-white py-3 rounded-lg mt-4 hover:bg-red-600 transition-colors transform hover:scale-105 active:scale-95 duration-200">
+          <button 
+            onClick={handleLogout}
+            className="w-full bg-red-500 text-white py-3 rounded-lg mt-4 hover:bg-red-600 transition-colors transform hover:scale-105 active:scale-95 duration-200"
+          >
             Esci
           </button>
         </div>
