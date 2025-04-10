@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { X, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import useClickOutside from '../hooks/useClickOutside';
+import useClickOutside from '../hooks/useclickoutside';
 
 interface OrderPayload {
   paymentMethod: string;
@@ -22,6 +22,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
   const { cartItems, updateQuantity, totalAmount } = useCart();
   const navigate = useNavigate();
   const cartRef = useRef<HTMLDivElement>(null);
+  const token = localStorage.getItem('token');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -42,10 +43,14 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
         }))
       };
 
-      const response = await fetch('http://80.16.146.77:2025/createordine', {
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch('http://80.16.146.77:2025/creaordine?sessionId='+token, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(orderPayload)
       });

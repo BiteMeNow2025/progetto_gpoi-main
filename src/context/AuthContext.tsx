@@ -78,9 +78,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         class: data.class,
       };
 
-      // Store user in localStorage
+      // Store user and session ID in localStorage
       localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.setItem('token', data.token || 'dummy-token');
+      localStorage.setItem('token', data.sessionId);
+      
+      if (!data.sessionId) {
+        throw new Error('No session ID received from server');
+      }
       
       setUser(userData);
       return true;

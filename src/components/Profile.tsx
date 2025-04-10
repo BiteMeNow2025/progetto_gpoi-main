@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { X, User, ExternalLink } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import useClickOutside from '../hooks/useClickOutside';
+import useClickOutside from '../hooks/useclickoutside';
 import { useAuth } from '../context/AuthContext';
 
 interface ProfileProps {
