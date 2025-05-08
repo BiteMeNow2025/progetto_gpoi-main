@@ -1,15 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { X, Plus, Minus } from 'lucide-react';
+import { X, Plus, Minus, Clock } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import useClickOutside from '../hooks/useclickoutside';
+import PaymentMethods from './PaymentMethods';
 
 interface OrderPayload {
-  paymentMethod: string;
-  paymentMethodTitle: string;
-  setPaid: boolean;
+  payment_method: string;
+  payment_method_title: string;
+  set_paid: boolean;
+  metadata: Array<{
+    key: string;
+    value: string;
+  }>;
   lineItems: Array<{
-    productId: number;
+    product_id: number; // Changed from productId to product_id to match server expectations
     quantity: number;
   }>;
 }
@@ -24,21 +29,33 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
   const cartRef = useRef<HTMLDivElement>(null);
   const token = localStorage.getItem('token');
   const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [pickupTime, setPickupTime] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   useClickOutside(cartRef, () => setIsCartOpen(false));
+  
+  // Available time slots
+  const timeSlots = ['10:00', '12:00', '14:00'];
 
   const handleSubmitOrder = async () => {
     try {
+      if (!pickupTime) {
+        setError('Please select a pickup time');
+        return;
+      }
+      
       setIsSubmitting(true);
       setError('');
       
       const orderPayload: OrderPayload = {
-        paymentMethod,
-        paymentMethodTitle: paymentMethod === 'cash' ? 'Cash' : 'Card',
-        setPaid: false,
+        payment_method,
+        payment_method_title: paymentMethod === 'cash' ? 'Cash' : 'Card',
+        set_paid: false,
+        metadata: [
+          { key: "intervallo", value: pickupTime }
+        ],
         lineItems: cartItems.map(item => ({
-          productId: item.id,
+          product_id: item.id, // Changed from productId to product_id to match server expectations
           quantity: item.quantity
         }))
       };
@@ -47,20 +64,32 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch('http://80.16.146.77:2025/creaordine?sessionId='+token, {
+      const response = await fetch('http://80.16.146.77:2025/creaordine/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(orderPayload)
       });
+      
+      console.log('Order submission response:', response.status);
+      // Try to get response body for debugging
+      try {
+        const responseData = await response.json();
+        console.log('Order response data:', responseData);
+      } catch (e) {
+        console.log('Could not parse response JSON:', e);
+      }
 
       if (!response.ok) {
         throw new Error('Failed to submit order');
       }
 
       setIsCartOpen(false);
-      navigate('/checkout');
+      // No need to navigate to checkout page anymore
+      // Just show a success message
+      alert('Ordine completato con successo! Ritira alle ore ' + pickupTime);
     } catch (err) {
       setError('Failed to submit order. Please try again.');
     } finally {
@@ -125,15 +154,43 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
               </div>
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
-                  <label className="text-white">Payment Method</label>
-                  <select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="bg-blue-900 text-white p-2 rounded-lg border border-blue-700"
-                  >
-                    <option value="cash">Cash</option>
-                    <option value="card">Card</option>
-                  </select>
+                  <label className="text-white">Metodo di Pagamento</label>
+                  <PaymentMethods
+                    selectedMethod={paymentMethod}
+                    onMethodChange={(method) => setPaymentMethod(method)}
+                    colors={{
+                      primary: '#FF9500',
+                      text: '#FFFFFF',
+                      inputBg: '#2C2C2E'
+                    }}
+                  />
+                </div>
+                
+                <div className="flex flex-col space-y-2 mt-4">
+                  <label className="text-white">Orario di Ritiro</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {timeSlots.map(time => (
+                      <label
+                        key={time}
+                        className={`flex flex-col items-center p-3 rounded-lg cursor-pointer bg-blue-950 transform transition-all duration-300 hover:scale-105 ${pickupTime === time ? 'border border-amber-500' : 'border border-blue-700'}`}
+                      >
+                        <input
+                          type="radio"
+                          name="pickupTime"
+                          value={time}
+                          checked={pickupTime === time}
+                          onChange={(e) => setPickupTime(e.target.value)}
+                          className="hidden"
+                        />
+                        <Clock size={20} className={pickupTime === time ? 'text-amber-500' : 'text-white'} />
+                        <span
+                          className={`mt-2 ${pickupTime === time ? 'text-amber-500' : 'text-white'}`}
+                        >
+                          {time}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <button 
@@ -141,7 +198,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
                   disabled={isSubmitting}
                   className="w-full bg-amber-500 text-white py-3 rounded-lg hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Processing...' : 'Submit Order'}
+                  {isSubmitting ? 'Elaborazione...' : 'Conferma Ordine'}
                 </button>
               </div>
             </div>

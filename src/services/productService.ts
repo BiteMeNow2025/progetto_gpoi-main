@@ -20,7 +20,7 @@ interface WooCommerceProduct {
   }>;
 }
 
-const API_URL = 'http://80.16.146.77:2025/prodotti';
+const API_URL = 'http://80.16.146.77:2025/prodotti/?perpage=100';
 
 const api = axios.create({
   baseURL: API_URL,

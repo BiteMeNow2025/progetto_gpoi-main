@@ -35,8 +35,8 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ selectedMethod, onMetho
       {paymentMethods.map((method) => (
         <label
           key={method.id}
-          className="flex items-center p-3 rounded-lg cursor-pointer"
-          style={{ backgroundColor: selectedMethod === method.id ? colors.inputBg : 'transparent' }}
+          className="flex items-center p-3 rounded-lg cursor-pointer bg-blue-950 transform transition-all duration-300 hover:scale-105"
+          style={{ backgroundColor: selectedMethod === method.id ? '#1e3a8a' : '' }}
         >
           <input
             type="radio"
@@ -47,18 +47,16 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ selectedMethod, onMetho
             className="hidden"
           />
           <div
-            className="w-5 h-5 rounded-full border mr-3 flex items-center justify-center"
-            style={{ borderColor: colors.primary }}
+            className="w-5 h-5 rounded-full border border-amber-500 mr-3 flex items-center justify-center"
           >
             {selectedMethod === method.id && (
               <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: colors.primary }}
+                className="w-3 h-3 rounded-full bg-amber-500"
               />
             )}
           </div>
           {method.icon}
-          <span style={{ color: colors.text }} className="ml-2">
+          <span className="ml-2 text-white">
             {method.name}
           </span>
         </label>

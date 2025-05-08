@@ -47,7 +47,12 @@ const CheckoutPage = () => {
       alert('Please select both payment method and pickup time');
       return;
     }
-    // Handle order submission
+    
+    // Show success message
+    alert('Ordine completato con successo! Grazie per il tuo acquisto.');
+    
+    // Redirect to homepage after successful order
+    window.location.href = '/';
     console.log('Order submitted:', { ...formData, total });
   };
 

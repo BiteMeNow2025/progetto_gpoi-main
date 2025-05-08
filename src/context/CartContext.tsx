@@ -8,7 +8,7 @@ interface CartContextProps {
   totalAmount: number;
   totalItems: number;
   lastAddedItem: Product | null;
-  isItemAdded: boolean;
+  isItemAdded: (id: number) => boolean;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -31,7 +31,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
   const [lastAddedItem, setLastAddedItem] = useState<Product | null>(null);
-  const [isItemAdded, setIsItemAdded] = useState(false);
+  const [animationActive, setAnimationActive] = useState(false);
 
   const addToCart = (product: Product) => {
     setCartItems(prevItems => {
@@ -48,11 +48,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     
     // Set the last added item and trigger animation
     setLastAddedItem(product);
-    setIsItemAdded(true);
+    setAnimationActive(true);
     
     // Reset animation state after 1.5 seconds
     setTimeout(() => {
-      setIsItemAdded(false);
+      setAnimationActive(false);
     }, 1500);
   };
 
@@ -68,6 +68,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
       return newItems;
     });
+  };
+
+  const isItemAdded = (id: number): boolean => {
+    return cartItems.some(item => item.id === id);
   };
 
   const value = {

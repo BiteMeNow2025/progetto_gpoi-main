@@ -51,7 +51,7 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
         </div>
         <div className="space-y-4">
           <div className="bg-blue-950 p-4 rounded-lg hover:bg-blue-900 transition-colors transform hover:scale-105 duration-200 cursor-pointer">
-            <h4 className="text-white font-bold mb-2">Ordini Passati</h4>
+            <Link to={'/pastorders'} className="text-white font-bold mb-2">Ordini Passati</Link>
             <p className="text-gray-400">Visualizza i tuoi ordini passati</p>
           </div>
           <button 

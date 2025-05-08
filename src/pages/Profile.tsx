@@ -12,15 +12,15 @@ const ProfilePage = () => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Colors for dark mode only
+  // Colors matching the homepage design system
   const colors = {
-    background: '#000000',
-    card: '#1C1C1E',
-    primary: '#FF9500',
-    danger: '#FF3B30',
-    text: '#FFFFFF',
-    textSecondary: '#8E8E93',
-    border: '#38383A',
+    background: '#1e3a8a', // blue-950
+    card: '#ffffff',
+    primary: '#f59e0b', // amber-500
+    danger: '#ef4444', // red-500
+    text: '#1e3a8a', // blue-950
+    textSecondary: '#9ca3af', // gray-400
+    border: '#e5e7eb', // gray-200
   };
 
   return (
