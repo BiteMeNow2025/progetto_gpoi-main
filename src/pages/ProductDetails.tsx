@@ -61,7 +61,7 @@ const ProductDetails: React.FC = () => {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto py-24 px-6 flex justify-center items-center">
-        <div className="animate-pulse text-amber-500 text-xl">Loading product details...</div>
+        <div className="animate-pulse text-amber-500 text-xl">Caricamento in corso</div>
       </div>
     );
   }
@@ -75,7 +75,7 @@ const ProductDetails: React.FC = () => {
           className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-all duration-300"
         >
           <ArrowLeft size={16} />
-          Back to Products
+          Indietro
         </button>
       </div>
     );
@@ -88,16 +88,16 @@ const ProductDetails: React.FC = () => {
         className="flex items-center gap-2 text-amber-500 mb-8 hover:text-amber-600 transition-colors"
       >
         <ArrowLeft size={16} />
-        Back to Products
+        Indietro
       </button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Product Image */}
-        <div className="bg-white backdrop-blur-md rounded-xl overflow-hidden">
+        <div className="bg-white backdrop-blur-md rounded-xl overflow-hidden max-w-md mx-auto md:mx-0">
           <img 
             src={product.image} 
             alt={product.name} 
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-contain p-4"
           />
         </div>
 
@@ -134,13 +134,16 @@ const ProductDetails: React.FC = () => {
 
           {/* Description */}
           <div>
-            <h2 className="text-xl font-bold text-white mb-2">Description</h2>
-            <p className="text-gray-400">{product.description}</p>
+            <h2 className="text-xl font-bold text-white mb-2">Descrizione</h2>
+            <div 
+              className="text-gray-400"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
           </div>
 
           {/* Quantity */}
           <div>
-            <h2 className="text-xl font-bold text-white mb-2">Quantity</h2>
+            <h2 className="text-xl font-bold text-white mb-2">Quantità</h2>
             <input 
               type="number" 
               min="1" 
@@ -156,7 +159,7 @@ const ProductDetails: React.FC = () => {
             className={`flex items-center gap-2 bg-amber-500 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] w-full justify-center text-lg ${isItemAdded(product.id) ? 'animate-pulse ring-4 ring-amber-300' : ''}`}
           >
             <ShoppingCart size={20} />
-            <span>{isItemAdded(product.id) ? 'Added to Cart' : 'Add to Cart'}</span>
+            <span>{isItemAdded(product.id) ? 'Aggiunto al carrello' : 'Aggiungi al carrello'}</span>
           </button>
         </div>
       </div>

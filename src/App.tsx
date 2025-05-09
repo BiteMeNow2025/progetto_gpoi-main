@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
-import MobileNavbar from './components/MobileNavbar';
+import MobileFloatingIcons from './components/MobileFloatingIcons';
+import FloatingSearchBar from './components/FloatingSearchBar';
+
 import SideMenu from './components/SideMenu';
 import Cart from './components/Cart';
 import Profile from './components/Profile';
@@ -26,11 +28,20 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const productsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const fetchedProducts = await getProducts();
-      setProducts(fetchedProducts);
+      try {
+        setIsLoading(true);
+        const fetchedProducts = await getProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchProducts();
   }, []);
@@ -64,19 +75,23 @@ function App() {
             navItems={navItems}  // Pass the navItems here
           />
 
-          {/* Mobile Bottom Navigation */}
-          <MobileNavbar 
+          {/* Mobile Floating Icons */}
+          <MobileFloatingIcons 
             setIsCartOpen={setIsCartOpen} 
             isCartOpen={isCartOpen} 
             setShowProfile={setShowProfile} 
-            showProfile={showProfile}
-            navItems={navItems}
+            showProfile={showProfile} 
           />
+
+
 
           {/* Sidebars and Modals */}
           {isMenuOpen && <SideMenu setIsMenuOpen={setIsMenuOpen} />}
           {isCartOpen && <Cart setIsCartOpen={setIsCartOpen} />}
           {showProfile && <Profile setShowProfile={setShowProfile} />}
+          
+          {/* Floating Search Bar */}
+          <FloatingSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} productsRef={productsRef} />
 
           {/* Main Content */}
           <div className="md:pt-16"> {/* Add padding top on medium screens and above to account for fixed navbar */}
@@ -86,7 +101,9 @@ function App() {
                 element={
                   <>
                     <HeroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} filteredProducts={filteredProducts} />
-                    <AllProducts products={filteredProducts} />
+                    <div ref={productsRef}>
+                      <AllProducts products={filteredProducts} isLoading={isLoading} />
+                    </div>
                   </>
                 }
               />
@@ -96,6 +113,7 @@ function App() {
             <Route path='/sharedcart' element={<SharedCart/>}/>
             <Route path='/checkout' element={<CheckoutPage />}/>
             <Route path='/pastorders' element={<PastOrders />}/>
+            <Route path='/product/:productId' element={<ProductDetails />}/>
           </Routes>
         </div>
       </div>

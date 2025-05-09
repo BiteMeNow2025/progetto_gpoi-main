@@ -4,17 +4,19 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import useClickOutside from '../hooks/useclickoutside';
 import PaymentMethods from './PaymentMethods';
+import { useAuth } from '../context/AuthContext';
 
 interface OrderPayload {
+  customer_id: number,
   payment_method: string;
   payment_method_title: string;
   set_paid: boolean;
-  metadata: Array<{
+  meta_data: Array<{
     key: string;
     value: string;
-  }>;
-  lineItems: Array<{
-    product_id: number; // Changed from productId to product_id to match server expectations
+  }>,
+  line_items: Array<{
+    product_id: number;
     quantity: number;
   }>;
 }
@@ -24,11 +26,11 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
-  const { cartItems, updateQuantity, totalAmount } = useCart();
+  const { cartItems, updateQuantity, totalAmount, clearCart } = useCart();
   const navigate = useNavigate();
   const cartRef = useRef<HTMLDivElement>(null);
   const token = localStorage.getItem('token');
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [payment_method, setPaymentMethod] = useState('cash');
   const [pickupTime, setPickupTime] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -37,7 +39,10 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
   // Available time slots
   const timeSlots = ['10:00', '12:00', '14:00'];
 
+  const { user } = useAuth();
+
   const handleSubmitOrder = async () => {
+    
     try {
       if (!pickupTime) {
         setError('Please select a pickup time');
@@ -48,13 +53,15 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
       setError('');
       
       const orderPayload: OrderPayload = {
+        customer_id: user.user_id,
         payment_method,
-        payment_method_title: paymentMethod === 'cash' ? 'Cash' : 'Card',
+        payment_method_title: payment_method === 'cash' ? 'Cash' : 'Card',
         set_paid: false,
-        metadata: [
-          { key: "intervallo", value: pickupTime }
+        meta_data: [
+          { key: "ora_consegna", value: pickupTime },
+          { key: "statobackend", value: "cucina" },
         ],
-        lineItems: cartItems.map(item => ({
+        line_items: cartItems.map(item => ({
           product_id: item.id, // Changed from productId to product_id to match server expectations
           quantity: item.quantity
         }))
@@ -67,30 +74,35 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
       const response = await fetch('http://80.16.146.77:2025/creaordine/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(orderPayload)
       });
       
       console.log('Order submission response:', response.status);
       // Try to get response body for debugging
+      let responseData;
       try {
-        const responseData = await response.json();
+        responseData = await response.json();
         console.log('Order response data:', responseData);
       } catch (e) {
         console.log('Could not parse response JSON:', e);
       }
 
-      if (!response.ok) {
-        throw new Error('Failed to submit order');
+      // Check if response status is in the successful range (200-299)
+      if (response.status >= 200 && response.status < 300) {
+        // Order was successful
+        // Clear the cart after successful order submission
+        clearCart();
+        setIsCartOpen(false);
+        // Show a success message
+        alert('Ordine completato con successo! Ritira alle ore ' + pickupTime);
+        return;
+      } else {
+        throw new Error('Failed to submit order: ' + (responseData?.message || response.statusText || 'Unknown error'));
       }
-
-      setIsCartOpen(false);
-      // No need to navigate to checkout page anymore
-      // Just show a success message
-      alert('Ordine completato con successo! Ritira alle ore ' + pickupTime);
     } catch (err) {
+      console.error('Order submission error:', err);
       setError('Failed to submit order. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -156,7 +168,7 @@ const Cart: React.FC<CartProps> = ({ setIsCartOpen }) => {
                 <div className="flex flex-col space-y-2">
                   <label className="text-white">Metodo di Pagamento</label>
                   <PaymentMethods
-                    selectedMethod={paymentMethod}
+                    selectedMethod={payment_method}
                     onMethodChange={(method) => setPaymentMethod(method)}
                     colors={{
                       primary: '#FF9500',

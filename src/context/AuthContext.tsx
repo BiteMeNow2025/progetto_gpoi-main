@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 
 interface User {
+  user_id: number;
   username: string;
   email: string;
   class?: string;
@@ -73,6 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // Create user object
       const userData: User = {
+        user_id: parseInt(data.user_id),
         username,
         email,
         class: data.class,

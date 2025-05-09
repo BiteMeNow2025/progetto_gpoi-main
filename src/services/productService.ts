@@ -30,7 +30,8 @@ const api = axios.create({
 const mapWooCommerceProduct = (product: WooCommerceProduct): Product => ({
   id: product.id,
   name: product.name,
-  description: product.short_description.replace(/<[^>]*>/g, ''),
+  description: product.description,
+  short_description: product.short_description,
   price: parseFloat(product.price),
   image: product.images[0]?.src || '/api/placeholder/400/320',
 });

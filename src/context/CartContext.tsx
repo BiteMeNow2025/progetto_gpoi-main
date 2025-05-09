@@ -5,6 +5,7 @@ interface CartContextProps {
   cartItems: CartItem[];
   addToCart: (product: Product) => void;
   updateQuantity: (id: number, change: number) => void;
+  clearCart: () => void; // Added clearCart
   totalAmount: number;
   totalItems: number;
   lastAddedItem: Product | null;
@@ -70,6 +71,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   const isItemAdded = (id: number): boolean => {
     return cartItems.some(item => item.id === id);
   };
@@ -78,6 +83,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     cartItems,
     addToCart,
     updateQuantity,
+    clearCart, // Added clearCart
     totalAmount,
     totalItems,
     lastAddedItem,

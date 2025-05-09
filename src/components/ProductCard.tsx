@@ -60,7 +60,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => 
         </div>
 
         {/* Description - Fixed Height */}
-        <p className="text-gray-400 text-sm h-10 mb-4 line-clamp-2">{product.description}</p>
+        <div 
+          className="text-gray-400 text-sm h-10 mb-4 line-clamp-2"
+        >
+          {product.short_description || product.description}
+        </div>
 
         {/* Push the price and buttons to bottom with flex-grow */}
         <div className="mt-auto">

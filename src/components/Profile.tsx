@@ -39,20 +39,12 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
           </div>
           <h3 className="text-white text-xl font-bold">{user ? user.username : 'Guest'}</h3>
           <p className="text-gray-400">{user ? user.email : 'Please login'}</p>
-          
-          {/* New button to open full profile page */}
-          <Link
-            to={"/profile"}
-            className="mt-4 flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-full hover:bg-amber-600 transition-colors transform hover:scale-105 active:scale-95 duration-200"
-          >
-            Profilo Completo
-            <ExternalLink className="h-4 w-4" />
-          </Link>
         </div>
+        <a href='/pastorders'>
         <div className="space-y-4">
           <div className="bg-blue-950 p-4 rounded-lg hover:bg-blue-900 transition-colors transform hover:scale-105 duration-200 cursor-pointer">
-            <Link to={'/pastorders'} className="text-white font-bold mb-2">Ordini Passati</Link>
-            <p className="text-gray-400">Visualizza i tuoi ordini passati</p>
+              <Link to={'/pastorders'} className="text-white font-bold mb-2">Ordini Passati</Link>
+              <p className="text-gray-400">Visualizza i tuoi ordini passati</p>
           </div>
           <button 
             onClick={handleLogout}
@@ -61,6 +53,7 @@ const Profile: React.FC<ProfileProps> = ({ setShowProfile }) => {
             Esci
           </button>
         </div>
+        </a>
       </div>
     </div>
   );

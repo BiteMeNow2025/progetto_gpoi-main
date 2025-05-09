@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Clock } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 import PaymentMethods from '../components/PaymentMethods';
 
 const CheckoutPage = () => {
+  const { clearCart } = useCart();
   const [formData, setFormData] = useState({
     paymentMethod: '',
     pickupTime: '',
@@ -47,6 +49,9 @@ const CheckoutPage = () => {
       alert('Please select both payment method and pickup time');
       return;
     }
+    
+    // Clear the cart after successful order
+    clearCart();
     
     // Show success message
     alert('Ordine completato con successo! Grazie per il tuo acquisto.');
